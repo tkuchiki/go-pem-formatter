@@ -1,22 +1,15 @@
-# go-pem-formatter
-
-Convert PEM Data to RFC7468 formatted string.
-
-## Example
-
-
-```go
-package main
+package pemformatter
 
 import (
-	"fmt"
-	"log"
+	"testing"
 
-	"github.com/tkuchiki/go-pem-formatter"
+	"github.com/stretchr/testify/assert"
 )
 
-func main() {
-	data := `-----BEGIN CERTIFICATE-----
+func TestFormat(t *testing.T) {
+	assert := assert.New(t)
+
+	rawdata := `-----BEGIN CERTIFICATE-----
 MIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGE
 wJCRTEPMA0GA1UEChMGR251VExTMSUwIwYDVQQLExxHbnVUTFMgY2VydGlmaWNhdGUgYXV0aG9y
 aXR5MQ8wDQYDVQQIEwZMZXV2ZW4xJTAjBgNVBAMTHEdudVRMUyBjZXJ
@@ -31,18 +24,7 @@ SM49BAMCA0gAMEUCIDGuwD1KPyG+hRf88MeyMQcqOFZD0TbVleF+UsAGQ4enAiEAl4wOuDwKQa
 +upc8GftXE2C//4mKANBC6It01gUaTIpo=
 -----END CERTIFICATE-----`
 
-	pem, err := pemformatter.Format(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(pem)
-}
-```
-
-```console
-$ go run /path/to/main.go
------BEGIN CERTIFICATE-----
+	formattedData := `-----BEGIN CERTIFICATE-----
 MIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G
 A1UEChMGR251VExTMSUwIwYDVQQLExxHbnVUTFMgY2VydGlmaWNhdGUgYXV0aG9y
 aXR5MQ8wDQYDVQQIEwZMZXV2ZW4xJTAjBgNVBAMTHEdudVRMUyBjZXJ0aWZpY2F0
@@ -55,5 +37,9 @@ uQ4RTEiywK87WRcWMGgJB5kX/t2no0MwQTAPBgNVHRMBAf8EBTADAQH/MA8GA1Ud
 DwEB/wQFAwMHBgAwHQYDVR0OBBYEFPC0gf6YEr+1KLlkQAPLzB9mTigDMAoGCCqG
 SM49BAMCA0gAMEUCIDGuwD1KPyG+hRf88MeyMQcqOFZD0TbVleF+UsAGQ4enAiEA
 l4wOuDwKQa+upc8GftXE2C//4mKANBC6It01gUaTIpo=
------END CERTIFICATE-----
-```
+-----END CERTIFICATE-----`
+
+	f, err := Format(rawdata)
+	assert.Nil(err)
+	assert.Equal(f, formattedData, "not equal")
+}
